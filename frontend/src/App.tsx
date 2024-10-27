@@ -1,18 +1,20 @@
-import './App.css';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
-import { Footer } from './components/Footer';
+import { fontFamily, fontSize, gray2 } from './Styles';
 
 function App() {
-  const renderContentAboveFooter = () => <h2>Content Above Footer</h2>;
-
   return (
-    <div className="App" style={{ textAlign: 'center' }}>
+    <div
+      css={css`
+        font-family: ${fontFamily};
+        font-size: ${fontSize};
+        color: ${gray2};
+      `}
+    >
       <Header />
       <HomePage />
-      <Footer renderContentAboveFooter={renderContentAboveFooter}>
-        This is your footer
-      </Footer>
     </div>
   );
 }

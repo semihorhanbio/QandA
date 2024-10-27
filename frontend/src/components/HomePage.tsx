@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+/** @jsxImportSource @emotion/react */
+import { PrimaryButton } from '../Styles';
+import { css } from '@emotion/react';
+import React from 'react';
 import { QuestionList } from './QuestionList';
 import { getUnansweredQuestions, QuestionData } from '../QuestionsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
 export const HomePage = () => {
-  const [questions, setQuestions] = useState<QuestionData[]>([]);
-  const [questionsLoading, setQuestionsLoading] = useState(true);
+  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
+  const [questionsLoading, setQuestionsLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const doGetUnansweredQuestions = async () => {
       const unansweredQuestions = await getUnansweredQuestions();
       setQuestions(unansweredQuestions);
@@ -15,12 +18,22 @@ export const HomePage = () => {
     };
     doGetUnansweredQuestions();
   }, []);
-
+  const handleAskQuestionClick = () => {
+    console.log('TODO - move to the AskPage');
+  };
   return (
     <Page>
-      <div>
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        `}
+      >
         <PageTitle>Unanswered Questions</PageTitle>
-        <button>Ask a question</button>
+        <PrimaryButton onClick={handleAskQuestionClick}>
+          Ask a question
+        </PrimaryButton>
       </div>
       {questionsLoading ? (
         <div>Loading...</div>
