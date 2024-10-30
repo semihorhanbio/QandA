@@ -7,7 +7,7 @@ import { HomePage } from './components/HomePage';
 import { fontFamily, fontSize, gray2 } from './Styles';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
- 
+
 import { SearchPage } from './pages/SearchPage';
 import { SignInPage } from './pages/SignInPage';
 import { NotFoundPage } from './pages/NotFoundPage';

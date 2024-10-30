@@ -9,8 +9,9 @@ import {
   FieldTextArea,
   FormButtonContainer,
   PrimaryButton,
+  FieldError,
 } from '../Styles';
-import {useState, useEffect} from 'react';
+import React from 'react';
 import { Page } from '../components/Page';
 import { useParams } from 'react-router-dom';
 import { QuestionData, getQuestion } from '../QuestionsData';
@@ -20,10 +21,9 @@ type FormData = {
   content: string;
 };
 export const QuestionPage = () => {
-  const [question, setQuestion] = useState<QuestionData | null>(null);
+  const [question, setQuestion] = React.useState<QuestionData | null>(null);
   const { questionId } = useParams();
-  
-  useEffect(() => {
+  React.useEffect(() => {
     const doGetQuestion = async (questionId: number) => {
       const foundQuestion = await getQuestion(questionId);
       setQuestion(foundQuestion);
@@ -32,7 +32,10 @@ export const QuestionPage = () => {
       doGetQuestion(Number(questionId));
     }
   }, [questionId]);
-  const { register } = useForm<FormData>();
+  const {
+    register,
+    formState: { errors },
+  } = useForm<FormData>({ mode: 'onBlur' });
   return (
     <Page>
       <div
@@ -54,7 +57,7 @@ export const QuestionPage = () => {
           {question === null ? '' : question.title}
         </div>
         {question !== null && (
-          <>
+          <React.Fragment>
             <p
               css={css`
                 margin-top: 0px;
@@ -78,17 +81,24 @@ export const QuestionPage = () => {
             <form
               css={css`
                 margin-top: 20px;
-              `                       
-            }              
+              `}
             >
               <Fieldset>
                 <FieldContainer>
                   <FieldLabel htmlFor="content">Your Answer</FieldLabel>
                   <FieldTextArea
-                    {...register('content')}
+                    {...register('content', { required: true, minLength: 50 })}
                     id="content"
                     name="content"
                   />
+                  {errors.content && errors.content.type === 'required' && (
+                    <FieldError>You must enter the answer</FieldError>
+                  )}
+                  {errors.content && errors.content.type === 'minLength' && (
+                    <FieldError>
+                      The answer must be at least 50 characters
+                    </FieldError>
+                  )}
                 </FieldContainer>
                 <FormButtonContainer>
                   <PrimaryButton type="submit">
@@ -97,7 +107,7 @@ export const QuestionPage = () => {
                 </FormButtonContainer>
               </Fieldset>
             </form>
-          </>
+          </React.Fragment>
         )}
       </div>
     </Page>
